@@ -1,5 +1,13 @@
+//Global vars
 let sentence = [];
 let noNewWords = 0;
+
+/**
+ * Get a word from the API.
+ *
+ * @returns {Promise<any>}
+ *   Returns the word.
+ */
 function fetchWord(){
     return fetch("http://involved-htf-js-2018-prod.azurewebsites.net/api/challenge/2",{
         method: "GET",
@@ -21,6 +29,9 @@ $(document).ready(() => {
     getData();
 });
 
+/**
+ * Poll all the words from the API.
+ */
 async function getData() {
     do {
         let worddata = await fetchWord();
@@ -36,7 +47,11 @@ async function getData() {
     postSentence(sentence.join(" "));
 }
 
-
+/**
+ * Post the right sentence to the API.
+ * 
+ * @param sentence
+ */
 function postSentence(sentence){
     console.log(sentence);
     fetch("http://involved-htf-js-2018-prod.azurewebsites.net/api/challenge/2",{
