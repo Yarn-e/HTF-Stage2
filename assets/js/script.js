@@ -1,6 +1,7 @@
 let sentence = [];
+let noNewWords = 0;
 function fetchWord(){
-    fetch("http://involved-htf-js-2018-prod.azurewebsites.net/api/challenge/2",{
+    return fetch("http://involved-htf-js-2018-prod.azurewebsites.net/api/challenge/2",{
         method: "GET",
         headers:{
             "Content-Type":  "application/json",
@@ -11,27 +12,29 @@ function fetchWord(){
         return response;
     }).then(data => {
         return data.json();
-    }).then(jsondata => {
-        sentence[jsondata.index] = jsondata.word;
+    }).then(jsonData => {
+        return jsonData;
     })
 }
 
 $(document).ready(() => {
-    /*
-    do{
-        fetchWord();
-    } while(sentence.length < 10);
-    console.log(sentence);
-    */
-    for(let i = 0; i <= 100; i++){
-        fetchWord();
-    }
-    
-    setTimeout(() => {
-        postSentence(sentence.join(" "))
-    }, 2000);
-    
-})
+    getData();
+});
+
+async function getData() {
+    do {
+        let worddata = await fetchWord();
+        if (typeof sentence[worddata.index] === "undefined") {
+            sentence[worddata.index] = worddata.word;
+        } else {
+            noNewWords++;
+        }
+        console.log(noNewWords);
+    } while (noNewWords < 5);
+
+    $('h2').html(sentence.join(" "));
+    postSentence(sentence.join(" "));
+}
 
 
 function postSentence(sentence){
